@@ -1,0 +1,22 @@
+class User:
+    def __init__(self, username):
+        self.username = username
+        self.high_score = 0
+        self.coins_collected = 0
+        self.power_ups = {
+            "double_jump": 0,
+            "shield": 0
+        }
+
+    def update_high_score(self, score):
+        if score > self.high_score:
+            self.high_score = score
+
+    def collect_coins(self, coins):
+        self.coins_collected += coins
+
+    def use_power_up(self, power_up):
+        if self.power_ups[power_up] > 0:
+            self.power_ups[power_up] -= 1
+            return True
+        return False
