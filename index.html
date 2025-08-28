@@ -3,507 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DermaAI - AI-Powered Skincare Solutions</title>
+    <title>Apple Store - Official Online Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
-        
-        :root {
-            --primary: #8B5FBF;
-            --secondary: #FF9A8B;
-            --accent: #93C5FD;
-            --dark: #1F2937;
-            --light: #F9FAFB;
+        .apple-gradient {
+            background: linear-gradient(135deg, #000000 0%, #2c3e50 100%);
         }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
-            min-height: 100vh;
-        }
-        
-        .brand-font {
-            font-family: 'Playfair Display', serif;
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-        }
-        
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
-        .ai-chat-bubble {
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.5s ease;
+        .auth-form {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
         }
-        
-        .ai-chat-bubble.show {
-            max-height: 500px;
-            opacity: 1;
-        }
-        
-        .loading-dots {
-            display: inline-block;
-        }
-        
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="bg-gray-50 font-sans">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
-                        <i class="fas fa-spa text-white text-xl"></i>
-                    </div>
-                    <span class="brand-font text-2xl font-bold text-purple-700">DermaAI</span>
+    <nav class="apple-gradient text-white p-4 fixed w-full top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <div class="text-2xl font-bold"></div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#products" class="hover:text-gray-300">Store</a>
+                    <a href="#mac" class="hover:text-gray-300">Mac</a>
+                    <a href="#iphone" class="hover:text-gray-300">iPhone</a>
+                    <a href="#ipad" class="hover:text-gray-300">iPad</a>
+                    <a href="#watch" class="hover:text-gray-300">Watch</a>
                 </div>
-                
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="text-gray-600 hover:text-purple-700 transition-colors">Home</a>
-                    <a href="#how-it-works" class="text-gray-600 hover:text-purple-700 transition-colors">How It Works</a>
-                    <a href="#products" class="text-gray-600 hover:text-purple-700 transition-colors">Products</a>
-                    <a href="#consultation" class="text-gray-600 hover:text-purple-700 transition-colors">AI Consultation</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative cursor-pointer" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag text-xl"></i>
+                    <span id="cartBadge" class="cart-badge hidden">0</span>
                 </div>
-                
-                <div class="flex items-center space-x-4">
-                    <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                        Get Started
-                    </button>
-                    <button class="md:hidden">
-                        <i class="fas fa-bars text-gray-600 text-xl"></i>
-                    </button>
+                <div id="authButtons" class="flex space-x-2">
+                    <button onclick="showLogin()" class="px-4 py-2 rounded hover:bg-white hover:text-black transition">Login</button>
+                    <button onclick="showSignup()" class="px-4 py-2 bg-white text-black rounded hover:bg-gray-200 transition">Sign Up</button>
+                </div>
+                <div id="userMenu" class="hidden items-center space-x-2">
+                    <span id="userName" class="text-sm"></span>
+                    <button onclick="logout()" class="px-3 py-1 text-sm bg-red-600 rounded hover:bg-red-700">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6 brand-font">
-                        AI-Powered <span class="text-purple-600">Skincare</span> Solutions
-                    </h1>
-                    <p class="text-xl text-gray-600 mb-8">
-                        Discover personalized skincare routines and product recommendations powered by artificial intelligence. Get expert advice tailored to your unique skin needs.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <button class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors font-semibold">
-                            Start Free Consultation
-                        </button>
-                        <button class="border border-purple-600 text-purple-600 px-8 py-3 rounded-lg hover:bg-purple-50 transition-colors font-semibold">
-                            View Products
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <div class="bg-white rounded-2xl shadow-xl p-6">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3ecfaba8-0cf3-4849-a9f4-adeebee5ba3d.png" alt="Modern skincare products arranged elegantly with clean aesthetic and natural lighting" class="w-full h-auto rounded-xl" />
-                    </div>
-                    <div class="absolute -bottom-4 -right-4 bg-white shadow-xl rounded-xl p-4 w-48">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center">
-                                <i class="fas fa-robot text-white"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold">AI Analysis</p>
-                                <p class="text-xs text-gray-500">Real-time skin assessment</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="apple-gradient text-white pt-24 pb-16">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to Apple Store</h1>
+            <p class="text-xl md:text-2xl mb-8">The best way to buy the products you love.</p>
+            <button onclick="scrollToProducts()" class="bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-gray-200 transition">
+                Shop Now
+            </button>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">How DermaAI Works</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Our advanced AI technology analyzes your skin concerns and provides personalized recommendations
-                </p>
-            </div>
+    <!-- Products Section -->
+    <section id="products" class="py-16">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
             
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-camera text-white text-2xl"></i>
+            <!-- Mac Products -->
+            <div id="mac" class="mb-16">
+                <h3 class="text-2xl font-semibold mb-8 text-center">Mac</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/13e19cd5-f1d2-486d-b9f5-e79bd13309e6.png" alt="MacBook Pro 16-inch with M2 Pro chip in Space Gray" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">MacBook Pro 16"</h4>
+                        <p class="text-gray-600 mb-4">M2 Pro chip, 16GB RAM, 1TB SSD</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$2,499.00</span>
+                            <button onclick="addToCart('MacBook Pro 16\"', 2499)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">1. Skin Analysis</h3>
-                    <p class="text-gray-600">
-                        Upload photos or describe your skin concerns. Our AI analyzes texture, tone, and specific issues.
-                    </p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-brain text-white text-2xl"></i>
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9418e6b4-781b-4308-b197-717242cc4196.png" alt="MacBook Air with M2 chip in Midnight Blue" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">MacBook Air</h4>
+                        <p class="text-gray-600 mb-4">M2 chip, 8GB RAM, 256GB SSD</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$1,199.00</span>
+                            <button onclick="addToCart ('MacBook Air', 1199)"class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">2. AI Processing</h3>
-                    <p class="text-gray-600">
-                        Our algorithms process your data and compare it with thousands of successful skincare cases.
-                    </p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-clipboard-list text-white text-2xl"></i>
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1233b7a4-7107-4ab9-b986-89cf4f3bd457.png" alt="iMac 24-inch with M1 chip in various colors" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">iMac 24"</h4>
+                        <p class="text-gray-600 mb-4">M1 chip, 8GB RAM, 256GB SSD</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$1,299.00</span>
+                            <button onclick="addToCart('iMac 24\"', 1299)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">3. Personalized Plan</h3>
-                    <p class="text-gray-600">
-                        Receive custom routines, product recommendations, and usage instructions tailored for you.
-                    </p>
                 </div>
             </div>
+
+            <!-- iPhone Products -->
+            <div id="iphone" class="mb-16">
+                <h3 class="text-2xl font-semibold mb-8 text-center">iPhone</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9ce93756-0c2b-4480-a1e9-09618f7a56eb.png" alt="iPhone 15 Pro Max in Titanium finish with triple camera system" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">iPhone 15 Pro Max</h4>
+                        <p class="text-gray-600 mb-4">256GB, Titanium</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$1,199.00</span>
+                            <button onclick="addToCart('iPhone 15 Pro Max', 1199)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0a441c68-b858-4878-b08f-a3475620a66d.png" alt="iPhone 15 in multiple colors with advanced camera features" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">iPhone 15</h4>
+                        <p class="text-gray-600 mb-4">128GB, Multiple Colors</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$799.00</span>
+                            <button onclick="addToCart('iPhone 15', 799)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/44664f4a-91ef-4374-a66b-ce613e26e8e0.png" alt="iPhone SE compact design with powerful performance" class="w-full h-48 object-contain mb-4">
+                        <h4 class="text-xl font-semibold mb-2">iPhone SE</h4>
+                        <p class="text-gray-600 mb-4">64GB, Compact Design</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">$429.00</span>
+                            <button onclick="addToCart('iPhone SE', 429)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More product categories would follow similar structure -->
         </div>
     </section>
 
-    <!-- Featured Products -->
-    <section id="products" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">AI-Recommended Products</h2>
-                <p class="text-xl text-gray-600">
-                    Curated skincare solutions based on thousands of successful treatments
-                </p>
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Your Cart</h3>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
             </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cfc2fd72-cc1c-40ee-9483-9d07d4853269.png" alt="Hydrating facial serum with dropper bottle and water droplets on glass surface" class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold">Bestseller</span>
-                        <h3 class="text-xl font-semibold mt-4">HydraGlow Serum</h3>
-                        <p class="text-gray-600 mt-2">Advanced hydration with hyaluronic acid and vitamin B5</p>
-                        <div class="flex items-center justify-between mt-6">
-                            <span class="text-2xl font-bold text-purple-600">$42.99</span>
-                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
+            <div id="cartItems" class="flex-1 overflow-y-auto mb-4">
+                <!-- Cart items will be inserted here -->
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between text-xl font-bold mb-4">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0.00</span>
                 </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/88d7acde-8817-491e-bd3a-8190ee3bd90f.png" alt="Anti-aging cream in luxurious jar with gold accents and leaf patterns" class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">Anti-Aging</span>
-                        <h3 class="text-xl font-semibold mt-4">AgeDefy Cream</h3>
-                        <p class="text-gray-600 mt-2">Powerful retinol formula for visible wrinkle reduction</p>
-                        <div class="flex items-center justify-between mt-6">
-                            <span class="text-2xl font-bold text-purple-600">$68.99</span>
-                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f5f27cc0-b91a-4e7f-9a07-2619273bbd63.png" alt="Gentle facial cleanser bottle with foam and green tea leaves background" class="w-full h-full object-cover" />
-                    </div>
-                    <div class="p-6">
-                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">Sensitive</span>
-                        <h3 class="text-xl font-semibold mt-4">PureCalm Cleanser</h3>
-                        <p class="text-gray-600 mt-2">Soothing formula for sensitive skin with chamomile extract</p>
-                        <div class="flex items-center justify-between mt-6">
-                            <span class="text-2xl font-bold text-purple-600">$29.99</span>
-                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <button onclick="checkout()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-semibold">
+                    Proceed to Checkout
+                </button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- AI Consultation -->
-    <section id="consultation" class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">AI Skin Consultation</h2>
-                <p class="text-xl text-gray-600">
-                    Get personalized skincare advice from our AI system
-                </p>
-            </div>
-            
-            <div class="bg-gray-50 rounded-2xl p-6 shadow-lg">
-                <div class="ai-chat-container">
-                    <div class="ai-chat-bubble show mb-4">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-robot text-white"></i>
-                            </div>
-                            <div class="bg-white rounded-2xl p-4 shadow-sm">
-                                <p class="text-gray-800">Hello! I'm DermaAI. Let's find the perfect skincare routine for you. What are your main skin concerns?</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="user-input-container">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
-                                Acne & Breakouts
-                            </button>
-                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
-                                Dryness
-                            </button>
-                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
-                                Aging & Wrinkles
-                            </button>
-                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
-                                Sensitivity
-                            </button>
-                        </div>
-                        
-                        <div class="flex space-x-3">
-                            <input type="text" placeholder="Or describe your concerns..." class="flex-1 border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-200">
-                            <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                                Send
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-12 grid md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
-                    </div>
-                    <h4 class="font-semibold mb-2">Privacy First</h4>
-                    <p class="text-gray-600 text-sm">Your data is encrypted and never shared with third parties</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-graduation-cap text-purple-600 text-xl"></i>
-                    </div>
-                    <h4 class="font-semibold mb-2">Expert Training</h4>
-                    <p class="text-gray-600 text-sm">Trained on thousands of dermatologist-approved routines</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-sync-alt text-purple-600 text-xl"></i>
-                    </div>
-                    <h4 class="font-semibold mb-2">Continuous Learning</h4>
-                    <p class="text-gray-600 text-sm">Our AI improves with every consultation</p>
-                </div>
-            </div>
+    <!-- Auth Modals -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="auth-form p-8 rounded-lg w-96">
+            <h3 class="text-2xl font-bold text-white mb-6 text-center">Login</h3>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <input type="email" id="loginEmail" placeholder="Email" required class="w-full p-3 rounded bg-white bg-opacity-10 text-white placeholder-gray-300">
+                <input type="password" id="loginPassword" placeholder="Password" required class="w-full p-3 rounded bg-white bg-opacity-10 text-white placeholder-gray-300">
+                <button type="submit" class="w-full bg-white text-black py-3 rounded font-semibold">Login</button>
+            </form>
+            <button onclick="hideAuthModals()" class="mt-4 text-white hover:text-gray-300">Cancel</button>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-                            <i class="fas fa-spa text-white"></i>
-                        </div>
-                        <span class="brand-font text-xl font-bold">DermaAI</span>
-                    </div>
-                    <p class="text-gray-400 mb-4">
-                        AI-powered skincare solutions for everyone. Get personalized routines and expert recommendations.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Products</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Consultation</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Shipping</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Newsletter</h4>
-                    <p class="text-gray-400 mb-4">Subscribe for skincare tips and exclusive offers</p>
-                    <div class="flex">
-                        <input type="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none flex-1">
-                        <button class="bg-purple-600 px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>© 2024 DermaAI. All rights reserved. Powered by AI technology.</p>
-            </div>
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="auth-form p-8 rounded-lg w-96">
+            <h3 class="text-2xl font-bold text-white mb-6 text-center">Create Account</h3>
+            <form onsubmit="handleSignup(event)" class="space-y-4">
+                <input type="text" id="signupName" placeholder="Full Name" required class="w-full p-3 rounded bg-white bg-opacity-10 text-white placeholder-gray-300">
+                <input type="email" id="signupEmail" placeholder="Email" required class="w-full p-3 rounded bg-white bg-opacity-10 text-white placeholder-gray-300">
+                <input type="password" id="signupPassword" placeholder="Password" required class="w-full p-3 rounded bg-white bg-opacity-10 text-white placeholder-gray-300">
+                <button type="submit" class="w-full bg-white text-black py-3 rounded font-semibold">Sign Up</button>
+            </form>
+            <button onclick="hideAuthModals()" class="mt-4 text-white hover:text-gray-300">Cancel</button>
         </div>
-    </footer>
+    </div>
 
     <script>
+        // User authentication and cart management
+        let currentUser = null;
+        let cart = [];
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // AI Chat Simulation
-            const concernButtons = document.querySelectorAll('.concern-btn');
-            const chatInput = document.querySelector('input[type="text"]');
-            const sendButton = document.querySelector('.user-input-container button');
-            const chatContainer = document.querySelector('.ai-chat-container');
-            
-            function addAIMessage(message) {
-                const chatBubble = document.createElement('div');
-                chatBubble.className = 'ai-chat-bubble mb-4';
-                chatBubble.innerHTML = `
-                    <div class="flex items-start space-x-3">
-                        <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-robot text-white"></i>
-                        </div>
-                        <div class="bg-white rounded-2xl p-4 shadow-sm">
-                            <p class="text-gray-800">${message}</p>
-                        </div>
-                    </div>
-                `;
-                
-                chatContainer.insertBefore(chatBubble, document.querySelector('.user-input-container'));
-                
-                // Show with animation
-                setTimeout(() => {
-                    chatBubble.classList.add('show');
-                }, 100);
-                
-                // Scroll to bottom
-                setTimeout(() => {
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                }, 150);
-            }
-            
-            function simulateAIResponse(concern) {
-                const responses = {
-                    'Acne & Breakouts': `For acne concerns, I recommend starting with our PureCalm Cleanser ($29.99) followed by the Acne Defense Serum ($38.99). Use twice daily and always follow with sunscreen.`,
-                    'Dryness': `For dry skin, the HydraGlow Serum ($42.99) is perfect. Follow with our Moisture Lock Cream ($49.99) and use our Gentle Exfoliator ($32.99) twice weekly.`,
-                    'Aging & Wrinkles': `For anti-aging, the AgeDefy Cream ($68.99) with retinol is excellent. Combine with our Vitamin C Booster ($45.99) and use sunscreen daily.`,
-                    'Sensitivity': `For sensitive skin, start with our Soothing Mist ($26.99) and Barrier Repair Cream ($52.99). Patch test new products and introduce slowly.`
-                };
-                
-                const defaultResponse = `Thank you for sharing your concern. Based on your description, I recommend starting with our Essential Care Kit ($89.99) which includes a gentle cleanser, moisturizer, and sunscreen. Would you like more specific recommendations?`;
-                
-                const response = responses[concern] || defaultResponse;
-                
-                // Show loading state
-                const loadingBubble = document.createElement('div');
-                loadingBubble.className = 'ai-chat-bubble mb-4';
-                loadingBubble.innerHTML = `
-                    <div class="flex items-start space-x-3">
-                        <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-robot text-white"></i>
-                        </div>
-                        <div class="bg-white rounded-2xl p-4 shadow-sm">
-                            <p class="text-gray-800">Analyzing your concern<span class="loading-dots"></span></p>
-                        </div>
-                    </div>
-                `;
-                
-                chatContainer.insertBefore(loadingBubble, document.querySelector('.user-input-container'));
-                loadingBubble.classList.add('show');
-                
-                // Simulate AI thinking time
-                setTimeout(() => {
-                    loadingBubble.remove();
-                    addAIMessage(response);
-                    
-                    // Follow-up question
-                    setTimeout(() => {
-                        addAIMessage("Would you like me to suggest a complete routine or do you have any other concerns?");
-                    }, 1000);
-                }, 2000);
-            }
-            
-            concernButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    simulateAIResponse(this.textContent.trim());
-                });
-            });
-            
-            sendButton.addEventListener('click', function() {
-                if (chatInput.value.trim()) {
-                    simulateAIResponse(chatInput.value);
-                    chatInput.value = '';
-                }
-            });
-            
-            chatInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && this.value.trim()) {
-                    simulateAIResponse(this.value);
-                    this.value = '';
-                }
-            });
-            
-            // Smooth scrolling for navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
+            checkAuthStatus();
+            loadCart();
         });
+
+        // Auth functions
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+        }
+
+        function showSignup() {
+            document.getElementById('signupModal').classList.remove('hidden');
+            document.getElementById('signupModal').classList.add('flex');
+        }
+
+        function hideAuthModals() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('signupModal').classList.add('hidden');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulate authentication (in real app, this would call backend API)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                updateAuthUI();
+                hideAuthModals();
+                alert('Login successful!');
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(u => u.email === email)) {
+                alert('Email already exists');
+                return;
+            }
+            
+            const newUser = { name, email, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            updateAuthUI();
+            hideAuthModals();
+            alert('Account created successfully!');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+        }
+
+        function checkAuthStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+            }
+            updateAuthUI();
+        }
+
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            
+            if (currentUser) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                userName.textContent = currentUser.name;
+            } else {
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+        }
+
+        // Cart functions
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            cartSidebar.classList.toggle('translate-x-full');
+            if (!cartSidebar.classList.contains('translate-x-full')) {
+                updateCartUI();
+            }
+        }
+
+        function addToCart(productName, price) {
+            if (!currentUser) {
+                alert('Please login to add items to cart');
+                showLogin();
+                return;
+            }
+            
+            cart.push({ productName, price, quantity: 1 });
+            saveCart();
+            updateCartBadge();
+            alert(`${productName} added to cart!`);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cartBadge');
+            badge.textContent = cart.length;
+            badge.classList.toggle('hidden', cart.length === 0);
+        }
+
+        function updateCartUI() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex justify-between items-center py-3 border-b';
+                itemElement.innerHTML = `
+                    <div>
+                        <h4 class="font-semibold">${item.productName}</h4>
+                        <p class="text-gray-600">$${item.price}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="updateQuantity(${index}, -1)" class="px-2 py-1 bg-gray-200 rounded">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${index}, 1)" class="px-2 py-1 bg-gray-200 rounded">+</button>
+                        <button onclick="removeFromCart(${index})" class="ml-4 text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                cartItems.appendChild(itemElement);
+            });
+            
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            saveCart();
+            updateCartUI();
+            updateCartBadge();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartUI();
+            updateCartBadge();
+        }
+
+        function saveCart() {
+            if (currentUser) {
+                localStorage.setItem(`cart_${currentUser.email}`, JSON.stringify(cart));
+            }
+        }
+
+        function loadCart() {
+            if (currentUser) {
+                const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                }
+            }
+            updateCartBadge();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            // Simulate order processing
+            alert('Order placed successfully! Thank you for your purchase.');
+            cart = [];
+            saveCart();
+            updateCartUI();
+            updateCartBadge();
+            toggleCart();
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
