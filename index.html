@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaAI - AI-Powered Skincare Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary: #8B5FBF;
+            --secondary: #FF9A8B;
+            --accent: #93C5FD;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+            min-height: 100vh;
+        }
+        
+        .brand-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .ai-chat-bubble {
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .ai-chat-bubble.show {
+            max-height: 500px;
+            opacity: 1;
+        }
+        
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                        <i class="fas fa-spa text-white text-xl"></i>
+                    </div>
+                    <span class="brand-font text-2xl font-bold text-purple-700">DermaAI</span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-purple-700 transition-colors">Home</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-purple-700 transition-colors">How It Works</a>
+                    <a href="#products" class="text-gray-600 hover:text-purple-700 transition-colors">Products</a>
+                    <a href="#consultation" class="text-gray-600 hover:text-purple-700 transition-colors">AI Consultation</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        Get Started
+                    </button>
+                    <button class="md:hidden">
+                        <i class="fas fa-bars text-gray-600 text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 brand-font">
+                        AI-Powered <span class="text-purple-600">Skincare</span> Solutions
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Discover personalized skincare routines and product recommendations powered by artificial intelligence. Get expert advice tailored to your unique skin needs.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors font-semibold">
+                            Start Free Consultation
+                        </button>
+                        <button class="border border-purple-600 text-purple-600 px-8 py-3 rounded-lg hover:bg-purple-50 transition-colors font-semibold">
+                            View Products
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="bg-white rounded-2xl shadow-xl p-6">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3ecfaba8-0cf3-4849-a9f4-adeebee5ba3d.png" alt="Modern skincare products arranged elegantly with clean aesthetic and natural lighting" class="w-full h-auto rounded-xl" />
+                    </div>
+                    <div class="absolute -bottom-4 -right-4 bg-white shadow-xl rounded-xl p-4 w-48">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold">AI Analysis</p>
+                                <p class="text-xs text-gray-500">Real-time skin assessment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">How DermaAI Works</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our advanced AI technology analyzes your skin concerns and provides personalized recommendations
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-camera text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">1. Skin Analysis</h3>
+                    <p class="text-gray-600">
+                        Upload photos or describe your skin concerns. Our AI analyzes texture, tone, and specific issues.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">2. AI Processing</h3>
+                    <p class="text-gray-600">
+                        Our algorithms process your data and compare it with thousands of successful skincare cases.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-clipboard-list text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">3. Personalized Plan</h3>
+                    <p class="text-gray-600">
+                        Receive custom routines, product recommendations, and usage instructions tailored for you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">AI-Recommended Products</h2>
+                <p class="text-xl text-gray-600">
+                    Curated skincare solutions based on thousands of successful treatments
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cfc2fd72-cc1c-40ee-9483-9d07d4853269.png" alt="Hydrating facial serum with dropper bottle and water droplets on glass surface" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold">Bestseller</span>
+                        <h3 class="text-xl font-semibold mt-4">HydraGlow Serum</h3>
+                        <p class="text-gray-600 mt-2">Advanced hydration with hyaluronic acid and vitamin B5</p>
+                        <div class="flex items-center justify-between mt-6">
+                            <span class="text-2xl font-bold text-purple-600">$42.99</span>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/88d7acde-8817-491e-bd3a-8190ee3bd90f.png" alt="Anti-aging cream in luxurious jar with gold accents and leaf patterns" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">Anti-Aging</span>
+                        <h3 class="text-xl font-semibold mt-4">AgeDefy Cream</h3>
+                        <p class="text-gray-600 mt-2">Powerful retinol formula for visible wrinkle reduction</p>
+                        <div class="flex items-center justify-between mt-6">
+                            <span class="text-2xl font-bold text-purple-600">$68.99</span>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f5f27cc0-b91a-4e7f-9a07-2619273bbd63.png" alt="Gentle facial cleanser bottle with foam and green tea leaves background" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">Sensitive</span>
+                        <h3 class="text-xl font-semibold mt-4">PureCalm Cleanser</h3>
+                        <p class="text-gray-600 mt-2">Soothing formula for sensitive skin with chamomile extract</p>
+                        <div class="flex items-center justify-between mt-6">
+                            <span class="text-2xl font-bold text-purple-600">$29.99</span>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Consultation -->
+    <section id="consultation" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 brand-font">AI Skin Consultation</h2>
+                <p class="text-xl text-gray-600">
+                    Get personalized skincare advice from our AI system
+                </p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-2xl p-6 shadow-lg">
+                <div class="ai-chat-container">
+                    <div class="ai-chat-bubble show mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div class="bg-white rounded-2xl p-4 shadow-sm">
+                                <p class="text-gray-800">Hello! I'm DermaAI. Let's find the perfect skincare routine for you. What are your main skin concerns?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-input-container">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
+                                Acne & Breakouts
+                            </button>
+                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
+                                Dryness
+                            </button>
+                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
+                                Aging & Wrinkles
+                            </button>
+                            <button class="concern-btn bg-white border border-gray-200 rounded-lg py-2 px-3 text-sm hover:bg-purple-50 hover:border-purple-200 transition-colors">
+                                Sensitivity
+                            </button>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <input type="text" placeholder="Or describe your concerns..." class="flex-1 border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-200">
+                            <button class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Privacy First</h4>
+                    <p class="text-gray-600 text-sm">Your data is encrypted and never shared with third parties</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-graduation-cap text-purple-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Expert Training</h4>
+                    <p class="text-gray-600 text-sm">Trained on thousands of dermatologist-approved routines</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-sync-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Continuous Learning</h4>
+                    <p class="text-gray-600 text-sm">Our AI improves with every consultation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                            <i class="fas fa-spa text-white"></i>
+                        </div>
+                        <span class="brand-font text-xl font-bold">DermaAI</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        AI-powered skincare solutions for everyone. Get personalized routines and expert recommendations.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">How It Works</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Consultation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Returns</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe for skincare tips and exclusive offers</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none flex-1">
+                        <button class="bg-purple-600 px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2024 DermaAI. All rights reserved. Powered by AI technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // AI Chat Simulation
+            const concernButtons = document.querySelectorAll('.concern-btn');
+            const chatInput = document.querySelector('input[type="text"]');
+            const sendButton = document.querySelector('.user-input-container button');
+            const chatContainer = document.querySelector('.ai-chat-container');
+            
+            function addAIMessage(message) {
+                const chatBubble = document.createElement('div');
+                chatBubble.className = 'ai-chat-bubble mb-4';
+                chatBubble.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 shadow-sm">
+                            <p class="text-gray-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.insertBefore(chatBubble, document.querySelector('.user-input-container'));
+                
+                // Show with animation
+                setTimeout(() => {
+                    chatBubble.classList.add('show');
+                }, 100);
+                
+                // Scroll to bottom
+                setTimeout(() => {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 150);
+            }
+            
+            function simulateAIResponse(concern) {
+                const responses = {
+                    'Acne & Breakouts': `For acne concerns, I recommend starting with our PureCalm Cleanser ($29.99) followed by the Acne Defense Serum ($38.99). Use twice daily and always follow with sunscreen.`,
+                    'Dryness': `For dry skin, the HydraGlow Serum ($42.99) is perfect. Follow with our Moisture Lock Cream ($49.99) and use our Gentle Exfoliator ($32.99) twice weekly.`,
+                    'Aging & Wrinkles': `For anti-aging, the AgeDefy Cream ($68.99) with retinol is excellent. Combine with our Vitamin C Booster ($45.99) and use sunscreen daily.`,
+                    'Sensitivity': `For sensitive skin, start with our Soothing Mist ($26.99) and Barrier Repair Cream ($52.99). Patch test new products and introduce slowly.`
+                };
+                
+                const defaultResponse = `Thank you for sharing your concern. Based on your description, I recommend starting with our Essential Care Kit ($89.99) which includes a gentle cleanser, moisturizer, and sunscreen. Would you like more specific recommendations?`;
+                
+                const response = responses[concern] || defaultResponse;
+                
+                // Show loading state
+                const loadingBubble = document.createElement('div');
+                loadingBubble.className = 'ai-chat-bubble mb-4';
+                loadingBubble.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 shadow-sm">
+                            <p class="text-gray-800">Analyzing your concern<span class="loading-dots"></span></p>
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.insertBefore(loadingBubble, document.querySelector('.user-input-container'));
+                loadingBubble.classList.add('show');
+                
+                // Simulate AI thinking time
+                setTimeout(() => {
+                    loadingBubble.remove();
+                    addAIMessage(response);
+                    
+                    // Follow-up question
+                    setTimeout(() => {
+                        addAIMessage("Would you like me to suggest a complete routine or do you have any other concerns?");
+                    }, 1000);
+                }, 2000);
+            }
+            
+            concernButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    simulateAIResponse(this.textContent.trim());
+                });
+            });
+            
+            sendButton.addEventListener('click', function() {
+                if (chatInput.value.trim()) {
+                    simulateAIResponse(chatInput.value);
+                    chatInput.value = '';
+                }
+            });
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    simulateAIResponse(this.value);
+                    this.value = '';
+                }
+            });
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
